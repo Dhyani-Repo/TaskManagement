@@ -10,3 +10,13 @@ export const SignUpPayloadFormat = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
 })
+export const UpdateUserPayloadFormat = Joi.object({
+    name: Joi.string().optional(),
+    email: Joi.string().email().optional(),
+    password: Joi.string().optional(),
+})
+export interface IUpdateUser {
+    name?:string,
+    email?:string,
+    password?:string
+}
