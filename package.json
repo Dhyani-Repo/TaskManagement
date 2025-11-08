@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate": "prisma generate",
     "dev": "nodemon --watch backend --watch server.ts --exec ts-node server.ts",
     "build": "next build --webpack",
     "start": "next start",

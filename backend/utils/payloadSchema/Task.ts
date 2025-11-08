@@ -1,47 +1,37 @@
 
 
 import Joi from "joi";
-
-
+import { TaskPriority, TaskStatus } from "../../constants";
 export interface ITaskCreate {
   title: string;
   description?: string;
-  status?: "PENDING" | "IN_PROGRESS" | "COMPLETED";
+  status?: TaskStatus;
   userId: string;
   creatorId:string;
+  priority?:TaskPriority;
+}
+export interface ITaskUpdate {
+  title?: string;
+  description?: string;
+  status?: TaskStatus;
+  priority?: TaskPriority;
+  userId?: string;
 }
 
 
 export const TaskCreateSchema = Joi.object({
-  title: Joi.string()
-    .min(3)
-    .max(100)
-    .required()
-    .messages({
-      "string.empty": "Title is required",
-      "string.min": "Title should be at least 3 characters long",
-    }),
-
-  description: Joi.string()
-    .max(500)
-    .optional()
-    .allow("")
-    .messages({
-      "string.max": "Description can be at most 500 characters",
-    }),
-
-  status: Joi.string()
-    .valid("PENDING", "IN_PROGRESS", "COMPLETED")
-    .optional()
-    .messages({
-      "any.only": "Status must be one of PENDING, IN_PROGRESS, or COMPLETED",
-    }),
-
-  userId: Joi.string()
-    .uuid()
-    .required()
-    .messages({
-      "string.guid": "Invalid userId format (must be UUID)",
-      "any.required": "userId is required",
-    }),
+  title: Joi.string().min(3).max(100).required(),
+  description: Joi.string().max(500).optional().allow(""),
+  status: Joi.string().valid(...Object.values(TaskStatus)).optional(),
+  priority: Joi.string().valid(...Object.values(TaskPriority)).optional(),
+  userId: Joi.string().uuid().required(),
+  creatorId: Joi.string().uuid().required(),
 });
+
+export const TaskUpdateSchema = Joi.object({
+  title: Joi.string().min(3).max(100).optional(),
+  description: Joi.string().max(500).optional().allow(""),
+  status: Joi.string().valid(...Object.values(TaskStatus)).optional(),
+  priority: Joi.string().valid(...Object.values(TaskPriority)).optional(),
+  userId: Joi.string().uuid().optional(),
+}).min(1); // Ensures at least one field is provided for update
