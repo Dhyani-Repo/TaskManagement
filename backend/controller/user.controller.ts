@@ -24,8 +24,20 @@ export class UserController {
             const hashedPass = await hashPassword(req.body.password)
             req.body.password = hashedPass
             const userData = await this.userService.createUser(req.body)
-            if(userData.isUserExisted){res.status(409).json({message:"User Already Existed !"})}
-            res.status(201).json(userData)
+            if(!userData){return res.status(409).json({message:"User Already Existed !"})}
+            return res.status(201).json(userData)
+        }catch(e:any){
+            console.error(e)
+            res.json({
+                message:`unable to signin !`,
+                error:e
+            })
+        }
+    }
+    login = async(req:Request,res:Response):Promise<any> => {
+        try{
+            const userData = await this.userService.login(req.body)
+            res.status(200).json(userData)
         }catch(e:any){
             console.error(e)
             throw new Error(e)

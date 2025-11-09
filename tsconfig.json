@@ -35,9 +35,15 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    ".next/dev/dev/types/**/*.ts"
+    ".next/dev/dev/types/**/*.ts",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "backend/types/**/*.d.ts"
+
   ],
   "exclude": [
     "node_modules"
   ]
 }
+

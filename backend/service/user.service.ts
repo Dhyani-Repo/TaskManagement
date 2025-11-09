@@ -1,7 +1,22 @@
 import prisma from "../../prisma"
-import {ISignUp, IUpdateUser} from "../utils/payloadSchema/User";
+import { veryfyPassword } from "../utils/hasher";
+import { generateTokens, JWTPayload } from "../utils/jwt";
+import {ILoginIn, ISignUp, IUpdateUser} from "../utils/payloadSchema/User";
 
 export class UserService {
+    login = async (payload: ILoginIn): Promise<{ success: boolean; message?: string; user?: any; tokens?: any }> => {
+    const user = await prisma.user.findFirst({ where: { email: payload.email } });
+    if (!user) return { success: false, message: "User not found" };
+    const isMatch = veryfyPassword(payload.password, user.password);
+    if (!isMatch) return { success: false, message: "Invalid password" };
+    const tokenPayload: JWTPayload = { id: user.id, role: user.role };
+    const tokens = await generateTokens(tokenPayload);
+    return {
+      success: true,
+      user: { id: user.id, email: user.email, role: user.role },
+      tokens
+    };
+  };
 
     getUserById = async(id:string):Promise<any> => {
         const data = await prisma.user.findUnique({where:{id:id}})
@@ -9,10 +24,8 @@ export class UserService {
     }
 
     createUser = async(user:ISignUp):Promise<any> => {
-        const isUserExisted = await prisma.user.findFirst({where:{email:user.email}})
-        if(isUserExisted){
-            return {isUserExisted}
-        }
+        const userData = await prisma.user.findFirst({where:{email:user.email}})
+        if(userData) userData
         const data = await prisma.user.create({
             data:{
                 email:      user.email,

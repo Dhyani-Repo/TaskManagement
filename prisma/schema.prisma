@@ -15,7 +15,7 @@ generator client {
   // Relations
   tasks     Task[]   @relation("AssignedTasks")
   team      Team?    @relation(fields: [teamId], references: [id])
-  teamId    String
+  teamId    String?
   managedTeams Team[]    @relation("ManagerTeams")
   createdTasks Task[] @relation("CreatedTasks")
   createdAt DateTime @default(now())
