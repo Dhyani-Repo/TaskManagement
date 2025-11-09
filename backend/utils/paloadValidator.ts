@@ -6,10 +6,12 @@ export const PayloadValidator = (schema:any) => {
     return function(req:Request,res:Response,next:NextFunction) {
         try{
             const { value, error } = schema.validate(req.body)
-            res.json({
+            if(error){
+                res.json({
                 message:"Payload validation Failed",
                 error
             })
+            }
             console.log(value)
             next()
         }catch(e:any) {

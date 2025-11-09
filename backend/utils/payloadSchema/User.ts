@@ -9,18 +9,27 @@ export interface ISignUp {
     teamId?: string;
 
 }
-// export const SignUpPayloadFormat = Joi.object({
-//     name: Joi.string().required(),
-//     email: Joi.string().email().required(),
-//     password: Joi.string().required(),
-// })
+
+export interface IUpdateUser {
+    name?:string,
+    email?:string,
+    password?:string
+}
+export interface ILoginIn {
+  email:string
+  password:string
+}
+export const LoginPayloadFormat = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+})
 export const SignUpPayloadFormat = Joi.object({
   name: Joi.string().min(3).max(100).required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
   role: Joi.string()
     .valid(...Object.values(UserRoles))
-    .optional(),
+    .optional().default(UserRoles.USER),
   teamId: Joi.string()
     .uuid()
     .optional()
@@ -43,8 +52,4 @@ export const UpdateUserPayloadFormat = Joi.object({
         "string.guid": "Invalid teamId format (must be UUID)",
     })
 })
-export interface IUpdateUser {
-    name?:string,
-    email?:string,
-    password?:string
-}
+

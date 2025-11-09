@@ -6,8 +6,8 @@ import { TaskCreateSchema, TaskUpdateSchema } from "../utils/payloadSchema/Task"
 const   router = Router();
 const taskController = new TaskController()
 router.get("/:id", taskController.getTaskById);
-router.get("/userId/:", taskController.getTaskByUserId);
-router.get("/managerId/:id")
+router.get("/userId/:id", taskController.getTaskByUserId);
+router.get("/managerId/:id",taskController.getTaskByManagerId)
 router.delete("/:id", taskController.deleteTask);
 router.delete("/:id", taskController.deleteAllTaskByUserId);
 router.patch("/:id",PayloadValidator(TaskUpdateSchema),taskController.updateTask)

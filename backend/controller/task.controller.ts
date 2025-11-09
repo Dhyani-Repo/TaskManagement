@@ -31,6 +31,18 @@ export class TaskController {
             throw new Error(e)
         }
     }
+    getTaskByManagerId = async(req:Request,res:Response):Promise<any> => {
+        try{
+            let id = req.params.id as string
+            if(!id) res.status(400).json({message:`Please Provide Task 'id' In Params`})
+            const taskData = await this.taskService.getTaskByUserId(req.body)
+            if(!taskData){res.status(404).json({message:"No Record Found !"})}
+            res.json(taskData)
+        }catch(e:any){
+            console.error(e)
+            throw new Error(e)
+        }
+    }
     createTask = async(req: Request, res: Response) => {
         try {
             const payload: ITaskCreate = req.body;

@@ -1,35 +1,29 @@
-  // import 'dotenv/config';
-  require("dotenv").config({path:"./env"});
+import "dotenv/config";          // load env
+import express from "express";
+import next from "next";
+import { getRedis } from "./backend/utils/redis";
+import userRouter from "./backend/routes/user.route";
+import taskRouter from "./backend/routes/task.route";
+import cookieParser from "cookie-parser"; 
 
-  import next from "next";
-  // import expressApp from "./backend/index"
-  import express from "express";
-  import userRouter from "./backend/routes/user.route";
-  import taskRouter from "./backend/routes/task.route";
-  // import dotenv from "dotenv"
-  // dotenv.config()
+const dev = process.env.NODE_ENV !== "production";
+const port = Number(process.env.PORT) || 3001;
 
-
-
-
-
-const dev = String(process.env.NODE_ENV) !== "production";
-// console.log("ourt node env is :",dev)
-const port = Number(process.env.PORT) || 3001
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
 
 const app = express();
 
-  app.use(express.json());
+// Redis init (singleton)
+getRedis();
 
-  app.use("/api/user", userRouter);
-  app.use("/api/task", taskRouter);
+app.use(express.json());
+app.use(cookieParser())
 
+// API routes
+app.use("/api/user", userRouter);
+app.use("/api/task", taskRouter);
 
 nextApp.prepare().then(() => {
-
-  // app.all("(/*)", (req, res) => handle(req, res));
-  app.listen(port, () => console.log(` App running  ${port}`)  );
-
+  app.listen(port, () => console.log(`App running on ${port}`));
 });

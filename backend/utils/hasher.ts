@@ -15,6 +15,7 @@ const hashPassword = async(password:string) => {
 const veryfyPassword = async(password:string,hashedPassword:string) => {
     try{
         const isMatch = await bcrypt.compare(password, hashedPassword);
+        console.log(`verifying password : ${isMatch}`)
     }catch(error:any){
         console.error(error)
         throw new Error(error)
@@ -22,5 +23,6 @@ const veryfyPassword = async(password:string,hashedPassword:string) => {
     
 }
 export {
-    hashPassword
+    hashPassword,
+    veryfyPassword
 }
